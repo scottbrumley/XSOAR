@@ -1,6 +1,6 @@
 category: Network Security
 commonfields:
-  id: 4aacf704-5e9e-43a0-8747-4d28102c9d05
+  id: PaloFirewall
   version: -1
 configuration:
 - defaultvalue: https://firewall
@@ -51,7 +51,7 @@ detaileddescription: |-
     3. Enter the key generated in the playground into your Integration instance
     4. Now you can use the Test Button
 display: Palo Firewall
-name: 4aacf704-5e9e-43a0-8747-4d28102c9d05
+name: PaloFirewall
 script:
   commands:
   - deprecated: false
