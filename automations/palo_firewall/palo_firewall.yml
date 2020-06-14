@@ -1,0 +1,16 @@
+args:
+- default: false
+  isArray: false
+  name: dev
+  required: false
+  secret: false
+commonfields:
+  id: d702625b-96c6-4f8f-b614-101416a68319
+  version: -1
+enabled: false
+name: palo_firewall
+script: '-'
+subtype: python3
+system: false
+timeout: '0'
+type: python
