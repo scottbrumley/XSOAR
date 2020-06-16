@@ -99,6 +99,10 @@ script:
     description: Disconnects the a current users from Global Protect
     execution: false
     name: panos-disconnect-current-user
+  - deprecated: false
+    description: List the Global Protect Gateway
+    execution: false
+    name: panos-get-gateways
   dockerimage: demisto/python3:3.7.4.2245
   feed: false
   isfetch: true
@@ -235,6 +239,15 @@ script:
 
         return r
 
+    def panos_get_gateways():
+        params = {
+            'type': 'op',
+            'cmd': '<show><global-protect-gateway><gateway/></global-protect-gateway></show>',
+            'key': demisto.params().get('apiKey')
+        }
+        r = http_request('GET', params)
+
+        return r
 
     def panos_disconnect_current_user():
         args = demisto.args()
@@ -281,8 +294,19 @@ script:
                 response_from_api = panos_get_current_users()
                 raw_response = response_from_api
                 command_results = CommandResults(
-                    outputs_prefix='GlobalProtect',
-                    outputs_key_field='CurrentUsers',
+                    outputs_prefix='GlobalProtect.CurrentUsers',
+                    outputs_key_field='public-ip',
+                    outputs=response_from_api,
+                    readable_output=raw_response,
+                    raw_response=raw_response
+                )
+                return_results(command_results)
+            if demisto.command() == 'panos-get-gateways':
+                response_from_api = panos_get_gateways()
+                raw_response = response_from_api
+                command_results = CommandResults(
+                    outputs_prefix='GlobalProtect.Gateways',
+                    outputs_key_field='gateway-name',
                     outputs=response_from_api,
                     readable_output=raw_response,
                     raw_response=raw_response
@@ -292,8 +316,8 @@ script:
                 response_from_api = panos_disconnect_current_user()
                 raw_response = response_from_api
                 command_results = CommandResults(
-                    outputs_prefix='GlobalProtect',
-                    outputs_key_field='Disconnected',
+                    outputs_prefix='GlobalProtect.Disconnected',
+                    outputs_key_field='user',
                     outputs=response_from_api,
                     readable_output=raw_response,
                     raw_response=raw_response

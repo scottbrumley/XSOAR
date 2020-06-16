@@ -1,3 +1,6 @@
+import demistomock as demisto
+from CommonServerPython import *
+from CommonServerUserPython import *
 import urllib3
 
 from CommonServerPython import *
@@ -127,6 +130,15 @@ def panos_get_current_users():
 
     return r
 
+def panos_get_gateways():
+    params = {
+        'type': 'op',
+        'cmd': '<show><global-protect-gateway><gateway/></global-protect-gateway></show>',
+        'key': demisto.params().get('apiKey')
+    }
+    r = http_request('GET', params)
+
+    return r
 
 def panos_disconnect_current_user():
     args = demisto.args()
@@ -173,8 +185,19 @@ def main():
             response_from_api = panos_get_current_users()
             raw_response = response_from_api
             command_results = CommandResults(
-                outputs_prefix='GlobalProtect',
-                outputs_key_field='CurrentUsers',
+                outputs_prefix='GlobalProtect.CurrentUsers',
+                outputs_key_field='public-ip',
+                outputs=response_from_api,
+                readable_output=raw_response,
+                raw_response=raw_response
+            )
+            return_results(command_results)
+        if demisto.command() == 'panos-get-gateways':
+            response_from_api = panos_get_gateways()
+            raw_response = response_from_api
+            command_results = CommandResults(
+                outputs_prefix='GlobalProtect.Gateways',
+                outputs_key_field='gateway-name',
                 outputs=response_from_api,
                 readable_output=raw_response,
                 raw_response=raw_response
@@ -184,8 +207,8 @@ def main():
             response_from_api = panos_disconnect_current_user()
             raw_response = response_from_api
             command_results = CommandResults(
-                outputs_prefix='GlobalProtect',
-                outputs_key_field='Disconnected',
+                outputs_prefix='GlobalProtect.Disconnected',
+                outputs_key_field='user',
                 outputs=response_from_api,
                 readable_output=raw_response,
                 raw_response=raw_response
@@ -196,6 +219,6 @@ def main():
     except Exception as e:
         logging.exception(e)
 
-
-if __name__ == 'builtins':
+# python2 uses __builtin__ python3 uses builtins
+if __name__ == "__builtin__" or __name__ == "builtins":
     main()

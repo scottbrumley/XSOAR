@@ -13,11 +13,7 @@ def params():
 
 
 def args():
-    return {
-        #"url":"https://192.168.10.9",
-        #"username":"scott",
-        #"password":"wttjwgfa123"
-    }
+    return {}
 
 
 def command():

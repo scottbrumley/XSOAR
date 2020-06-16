@@ -85,6 +85,10 @@ script:
     description: Disconnects the a current users from Global Protect
     execution: false
     name: panos-disconnect-current-user
+  - deprecated: false
+    description: List the Global Protect Gateway
+    execution: false
+    name: panos-get-gateways
   dockerimage: demisto/python3:3.7.4.2245
   feed: false
   isfetch: true
